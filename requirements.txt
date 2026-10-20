@@ -1,0 +1,10 @@
+Flask
+PyMuPDF
+python-docx
+python-pptx
+openpyxl
+Pillow
+pytesseract
+striprtf
+beautifulsoup4
+Werkzeug

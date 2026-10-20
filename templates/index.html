@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#08111f">
+    <title>CareerIQ | AI Career Intelligence</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="app-layout">
+
+    <aside class="sidebar" id="sidebar">
+        <a href="#" class="brand">
+            <span class="brand-icon">✳</span>
+            <span>Career<span class="brand-accent">IQ</span></span>
+        </a>
+
+        <p class="menu-label">WORKSPACE</p>
+
+        <nav class="navigation">
+            <a href="#overview" class="nav-link active">▦ <span>Dashboard</span></a>
+            <a href="#analysis" class="nav-link">◈ <span>Resume Analysis</span></a>
+            <a href="#skills" class="nav-link">✧ <span>Skill Intelligence</span></a>
+            <a href="#roadmap" class="nav-link">⌁ <span>Career Roadmap</span></a>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <div class="ai-status">
+                <span class="status-dot"></span>
+                <div>
+                    <strong>Career Engine</strong>
+                    <small>Analysis service ready</small>
+                </div>
+            </div>
+            <p class="sidebar-footer">CareerIQ v1.0 · Portfolio Project</p>
+        </div>
+    </aside>
+
+    <main class="main-content" id="overview">
+        <header class="topbar">
+            <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">☰</button>
+
+            <div>
+                <p class="eyebrow">AI-POWERED CAREER ANALYTICS</p>
+                <h1>Career Intelligence <span class="heading-spark">✦</span></h1>
+                <p class="subheading">Turn your skills into your next opportunity.</p>
+            </div>
+
+            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">☼</button>
+        </header>
+
+        <section class="welcome-banner">
+            <div class="welcome-copy">
+                <span class="pill"><span class="status-dot"></span> YOUR CAREER, INTELLIGENTLY</span>
+                <h2>Discover your <span>career potential.</span></h2>
+                <p>Analyze your resume, discover skill gaps, and build a personalized career roadmap.</p>
+                <a href="#analysis" class="primary-button">Start Career Analysis ↗</a>
+            </div>
+            <div class="orbital-art" aria-hidden="true">
+                <div class="orbit orbit-one"></div>
+                <div class="orbit orbit-two"></div>
+                <div class="orbit orbit-three"></div>
+                <div class="orb-core">✳</div>
+                <span class="float-tag tag-one">AI INSIGHTS</span>
+                <span class="float-tag tag-two">SKILL MAP</span>
+            </div>
+        </section>
+
+        <section class="metric-grid">
+            <article class="metric-card">
+                <div class="metric-top"><span>Career Readiness</span><span class="metric-icon mint">◉</span></div>
+                <h3 id="readinessValue">--<small>%</small></h3>
+                <p id="readinessNote">Upload a resume to begin</p>
+                <div class="mini-track"><span id="readinessBar"></span></div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top"><span>Skills Identified</span><span class="metric-icon violet">✧</span></div>
+                <h3 id="skillCount">--</h3>
+                <p>Unique skills found in your resume</p>
+                <div class="mini-track violet-track"><span id="skillsBar"></span></div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top"><span>Target Role Match</span><span class="metric-icon blue">◎</span></div>
+                <h3 id="matchValue">--<small>%</small></h3>
+                <p>Required skills found in your resume</p>
+                <div class="mini-track blue-track"><span id="matchBar"></span></div>
+            </article>
+
+            <article class="metric-card">
+                <div class="metric-top"><span>Skill Gaps</span><span class="metric-icon orange">⌁</span></div>
+                <h3 id="gapCount">--</h3>
+                <p>Target-role skills not detected</p>
+                <div class="mini-track orange-track"><span id="gapBar"></span></div>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel upload-panel" id="analysis">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">INTELLIGENT DOCUMENT SCANNING</p>
+                        <h2>Resume Intelligence</h2>
+                    </div>
+                    <span class="panel-symbol">⌁</span>
+                </div>
+
+                <form id="resumeForm">
+                    <label class="field-label" for="roleSelect">Target career role</label>
+                    <select id="roleSelect" name="role" required>
+                        {% for role in roles %}
+                        <option value="{{ role }}">{{ role }}</option>
+                        {% endfor %}
+                    </select>
+
+                    <label class="drop-zone" for="resumeFile" id="dropZone">
+                        <div class="upload-symbol">↑</div>
+                        <strong>Drop your resume here</strong>
+                        <span>or click to browse your files</span>
+                        <small>PDF, DOCX, TXT · Maximum 10 MB</small>
+                        <input type="file" id="resumeFile" name="resume"
+                               accept=".pdf,.docx,.txt" required>
+                        <span id="fileName" class="file-name">No file selected</span>
+                    </label>
+
+                    <button type="submit" class="primary-button full-button" id="analyzeButton">
+                        ✧ Analyze My Career <span>→</span>
+                    </button>
+                    <p id="formMessage" class="form-message" role="status"></p>
+                </form>
+            </article>
+
+            <article class="panel" id="skills">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">COMPETENCY BREAKDOWN</p>
+                        <h2>Skill Intelligence</h2>
+                    </div>
+                    <span class="live-badge">LIVE RESULTS</span>
+                </div>
+                <div class="chart-container radar-container">
+                    <canvas id="skillChart"></canvas>
+                </div>
+                <p class="chart-note">Detected skills are grouped into available competency categories. This is not a proficiency test.</p>
+            </article>
+        </section>
+
+        <section class="content-grid lower-grid">
+            <article class="panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">CAREER COMPATIBILITY</p>
+                        <h2>Role Match Analysis</h2>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="matchChart"></canvas>
+                </div>
+            </article>
+
+            <article class="panel">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow">RESUME QUALITY CHECK</p>
+                        <h2>Resume Insights</h2>
+                    </div>
+                </div>
+                <div class="chart-container small-chart">
+                    <canvas id="resumeChart"></canvas>
+                </div>
+                <div class="resume-summary">
+                    <span>Resume completeness</span>
+                    <strong id="resumeScore">--%</strong>
+                </div>
+            </article>
+        </section>
+
+        <section class="panel results-panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">PERSONALIZED INTELLIGENCE</p>
+                    <h2>Career Analysis Results</h2>
+                </div>
+                <span class="result-label" id="resultRole">Awaiting resume</span>
+            </div>
+
+            <div id="emptyState" class="empty-state">
+                <div class="empty-icon">✧</div>
+                <h3>Your career insights start here</h3>
+                <p>Upload a resume to see detected skills, missing requirements, and recommendations.</p>
+            </div>
+
+            <div id="resultsArea" hidden>
+                <div class="result-columns">
+                    <div>
+                        <h3>✓ Matched skills</h3>
+                        <div id="matchedSkills" class="skill-tags"></div>
+                    </div>
+                    <div>
+                        <h3>◎ Skills to develop</h3>
+                        <div id="missingSkills" class="skill-tags"></div>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <h3>Recommended next steps</h3>
+                <div id="recommendations" class="recommendation-list"></div>
+                <div class="result-actions">
+                    <button id="downloadReport" class="secondary-button">↓ Export Report</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="panel roadmap-panel" id="roadmap">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">YOUR NEXT MILESTONE</p>
+                    <h2>Career Growth Roadmap</h2>
+                </div>
+            </div>
+            <div class="roadmap-steps">
+                <div class="roadmap-step">
+                    <span class="step-number">01</span>
+                    <div><h3>Understand your strengths</h3><p>Analyze the skills and experience already present in your resume.</p></div>
+                </div>
+                <div class="roadmap-step">
+                    <span class="step-number">02</span>
+                    <div><h3>Close priority skill gaps</h3><p>Practice missing role-specific skills through courses and exercises.</p></div>
+                </div>
+                <div class="roadmap-step">
+                    <span class="step-number">03</span>
+                    <div><h3>Build a project portfolio</h3><p>Demonstrate your capabilities through practical, verifiable projects.</p></div>
+                </div>
+                <div class="roadmap-step">
+                    <span class="step-number">04</span>
+                    <div><h3>Review and improve</h3><p>Update your resume as you gain experience and new skills.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span>✳ CareerIQ <span class="brand-accent">Intelligence</span></span>
+            <span>AI-assisted career insights · Verify recommendations independently</span>
+        </footer>
+    </main>
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

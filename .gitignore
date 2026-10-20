@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Uploaded resumes and private documents
+uploads/
+*.pdf
+*.docx
+*.doc
+*.xlsx
+*.pptx
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IDE and operating system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

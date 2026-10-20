@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerIQ | Career Analysis Report</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="main-content" style="width:100%;max-width:1100px">
+
+    <header class="topbar">
+        <div>
+            <p class="eyebrow">CAREER INTELLIGENCE REPORT</p>
+            <h1>Your Career Analysis</h1>
+            <p class="subheading">
+                Resume: {{ result.filename }}
+            </p>
+        </div>
+        <a href="{{ url_for('index') }}" class="primary-button">
+            ← Dashboard
+        </a>
+    </header>
+
+    <section class="welcome-banner">
+        <div class="welcome-copy">
+            <span class="pill">✧ ANALYSIS COMPLETE</span>
+            <h2>{{ result.role }}</h2>
+            <p>
+                Your career report is based on the skills and resume
+                sections detected in your document.
+            </p>
+        </div>
+    </section>
+
+    <section class="metric-grid">
+        <article class="metric-card">
+            <div class="metric-top">Career Readiness</div>
+            <h3>{{ result.readiness }}<small>%</small></h3>
+            <p>Heuristic estimate</p>
+        </article>
+
+        <article class="metric-card">
+            <div class="metric-top">Role Match</div>
+            <h3>{{ result.match_score }}<small>%</small></h3>
+            <p>Weighted skill coverage</p>
+        </article>
+
+        <article class="metric-card">
+            <div class="metric-top">Skills Identified</div>
+            <h3>{{ result.skill_count }}</h3>
+            <p>Resume keywords detected</p>
+        </article>
+
+        <article class="metric-card">
+            <div class="metric-top">Skill Gaps</div>
+            <h3>{{ result.skill_gap_count }}</h3>
+            <p>Target role skills not detected</p>
+        </article>
+    </section>
+
+    <section class="content-grid">
+        <article class="panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">STRENGTHS</p>
+                    <h2>Matched Skills</h2>
+                </div>
+            </div>
+
+            <div class="skill-tags">
+                {% for skill in result.matched_skills %}
+                <span class="skill-tag matched">{{ skill }}</span>
+                {% else %}
+                <p class="chart-note">No matching skills were detected.</p>
+                {% endfor %}
+            </div>
+        </article>
+
+        <article class="panel">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">GROWTH OPPORTUNITIES</p>
+                    <h2>Skills to Develop</h2>
+                </div>
+            </div>
+
+            <div class="skill-tags">
+                {% for skill in result.missing_skills %}
+                <span class="skill-tag missing">{{ skill }}</span>
+                {% else %}
+                <p class="chart-note">
+                    All listed role skills were detected in the resume.
+                </p>
+                {% endfor %}
+            </div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">DOCUMENT REVIEW</p>
+                <h2>Resume Sections</h2>
+            </div>
+        </div>
+
+        {% for name, present in result.sections.items() %}
+        <div style="display:flex;justify-content:space-between;
+                    gap:15px;padding:12px 0;
+                    border-bottom:1px solid var(--border)">
+            <span>{{ name }}</span>
+            {% if present %}
+            <strong style="color:#42e5bd">Detected</strong>
+            {% else %}
+            <strong style="color:#ffbb76">Not detected</strong>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <p class="chart-note">
+            A missing section may reflect extraction limitations or
+            different resume formatting, not necessarily missing content.
+        </p>
+    </section>
+
+    <section class="panel" style="margin-top:22px">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">PERSONALIZED ACTION PLAN</p>
+                <h2>Recommendations</h2>
+            </div>
+        </div>
+
+        {% for item in result.recommendations %}
+        <article class="recommendation-card"
+                 style="margin-bottom:12px">
+            <h4>{{ item.title }}</h4>
+            <p>{{ item.description }}</p>
+        </article>
+        {% else %}
+        <p class="chart-note">No additional recommendations available.</p>
+        {% endfor %}
+    </section>
+
+    <section class="panel" style="margin-top:22px">
+        <h2 style="font-size:16px;margin-bottom:15px">Analysis Summary</h2>
+        <p class="chart-note">
+            Resume word count: {{ result.word_count }}
+        </p>
+        <p class="chart-note">
+            Experience duration explicitly detected:
+            {{ result.experience_years }} year(s)
+        </p>
+        <p class="chart-note">
+            This report uses keyword detection and rule-based scoring.
+            It does not measure actual proficiency or guarantee employment.
+        </p>
+        <button class="primary-button"
+                onclick="window.print()"
+                style="margin-top:18px">
+            Print / Save as PDF
+        </button>
+    </section>
+
+</main>
+</body>
+</html>
